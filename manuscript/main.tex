@@ -1107,7 +1107,7 @@ The gap between current AI-assisted research and a fully self-evolving research 
 
 The complete MATLAB implementation of the LTCA solver, including the five-case parametric study and all formal verification artifacts, is publicly available at:
 \begin{quote}
-\url{https://github.com/haomjc/sah-ltca-cycloid} \quad (\texttt{commit 7f49bf7})
+\url{https://github.com/haomjc/sah-ltca-cycloid} \quad (\texttt{commit 901abdd})
 \end{quote}
 
 The repository contains seven core MATLAB functions (\texttt{run\_parametric\_study.m}, \texttt{runTCA\_analysis.m}, \texttt{fun\_force\_analysis.m}, \texttt{fun\_findtc.m}, \texttt{fun\_output\_mod.m}, \texttt{fun\_tooth\_stiffness.m}, \texttt{export\_analysis\_data.m}) and three formal verification artifacts:
@@ -1119,6 +1119,8 @@ The repository contains seven core MATLAB functions (\texttt{run\_parametric\_st
 \end{enumerate}
 
 \noindent\textbf{Required toolbox:} MATLAB Symbolic Math Toolbox (used by \texttt{fun\_output\_mod.m} for contact geometry solving).
+
+The repository also contains the complete \LaTeX{} manuscript source (\texttt{manuscript/}), including \texttt{main.tex}, \texttt{references.bib}, pgfplots data files, and the graphical abstract. The manuscript itself is designed as a machine-readable artifact consistent with the SAH framework: every claim is linked to a code path, every algorithm has a structured passport, every formula has dimensional bindings, and every figure has a regeneration path from solver output through \texttt{.dat} files to pgfplots/TikZ rendering.
 
 \section*{Acknowledgments}
 
