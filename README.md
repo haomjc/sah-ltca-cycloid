@@ -2,7 +2,11 @@
 
 **Loaded Tooth Contact Analysis (LTCA) for Cycloid-Pin-Housing Reducers with Semantic Artifact Harness (SAH) Formal Verification**
 
-This repository contains the MATLAB implementation of a comprehensive LTCA solver for cycloid speed reducers, along with formal verification artifacts (JSON Schema, Dafny contracts) that demonstrate the Semantic Artifact Harness methodology.
+This repository contains:
+
+1. **MATLAB solver** — a comprehensive LTCA engine for cycloid speed reducers.
+2. **Formal verification artifacts** — JSON Schema, MATLAB runtime assertions, and Dafny contracts that demonstrate the Semantic Artifact Harness methodology.
+3. **LaTeX manuscript source** — the complete paper source (`main.tex`, `references.bib`, `arxiv.sty`, figures, pgfplots data) designed as a **machine-readable artifact**: every claim is linked to evidence, every algorithm has a passport, every formula has dimensional bindings, and every figure has a regeneration path. The manuscript itself is the primary demonstration of the SAH framework.
 
 ## Quick Start
 
@@ -29,15 +33,30 @@ verification/
   sah-ltca.schema.json      JSON Schema defining SAH harness structure
   ltca_contracts.dfy        Dafny contract sketch with loop invariants
 
+manuscript/                 LaTeX source — machine-readable paper artifact
+  main.tex                  Full paper with claim-evidence maps, algorithm passports,
+                            formula passports, code-artifact maps, and pgfplots figures
+  references.bib            BibTeX records with dense evidence annotations
+  arxiv.sty                 Document style
+  graphicalAbstract.png     Graphical abstract
+  data/                     pgfplots .dat files exported from MATLAB solver
+
 data/                       Output directory (generated at runtime)
 ```
 
 ## Dependencies
 
+### MATLAB (for solver)
+
 - **MATLAB R2020b** or later
 - **Symbolic Math Toolbox** (required by `fun_output_mod.m`)
 - **Optimization Toolbox** (`fsolve`, `fzero`)
 - **Parallel Computing Toolbox** (`parfor`, `parpool`)
+
+### LaTeX (for manuscript)
+
+- **TeX Live** or **MiKTeX** with `pdflatex` and `bibtex`
+- Packages: `pgfplots`, `tikz`, `tcolorbox`, `natbib`, `algorithm`, `algpseudocode`, `geometry`, `fancyhdr`
 
 ## Call Chain
 
@@ -50,6 +69,19 @@ run_parametric_study.m
   |     +-- fun_force_analysis.m  (LTCA: scan + fzero + Hertz iteration)
   +-- export_analysis_data.m      (export .dat for pgfplots)
 ```
+
+## Manuscript as Machine-Readable Artifact
+
+The `manuscript/` directory contains the complete LaTeX source of the paper *"Semantic Artifact Harness for AI-Native Research"*. The manuscript is not a conventional paper—it is designed as a **typed, auditable artifact** where:
+
+- Every **claim** is linked to a code path, figure, table, or verification artifact via a claim-evidence map.
+- Every **algorithm** has a structured passport (inputs, outputs, assumptions, failure modes, convergence criteria).
+- Every **formula** has a passport with variable bindings and dimensional analysis.
+- Every **figure** has a regeneration path (MATLAB script → `.dat` → pgfplots → TikZ).
+- Every **AI interaction** is recorded as a compressed correction trace.
+- The **literature** is compressed into a dense evidence matrix mapping source → role → boundary.
+
+This structure makes the paper inspectable by both humans and AI systems, which is the core thesis of the SAH framework. The LaTeX source can be compiled with `pdflatex` + `bibtex`; figures are generated from solver output in `data/`.
 
 ## Formal Verification
 

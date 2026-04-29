@@ -1,0 +1,6 @@
+CaseIndex	CaseName	TorsionalStiffness
+1	Ideal	1542.1120
+2	Fric	1548.0706
+3	GearK	1542.1120
+4	PinDisp	1435.7750
+5	Coupled	1443.5599

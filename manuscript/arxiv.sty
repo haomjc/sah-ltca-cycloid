@@ -1,0 +1,26 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{arxiv}[2026/04/28 Minimal arXiv-style package]
+
+\RequirePackage[margin=1in]{geometry}
+\RequirePackage{fancyhdr}
+\RequirePackage{titlesec}
+
+\newcommand{\shorttitle}{}
+\newcommand{\headeright}{A preprint}
+\newcommand{\undertitle}{A preprint}
+
+\newcommand{\keywords}[1]{%
+  \vspace{0.5em}
+  \noindent\textbf{Keywords: } #1
+}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\shorttitle}
+\fancyhead[R]{\headeright}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+\titleformat{\section}{\large\bfseries}{\thesection}{1em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{1em}{}
+\titleformat{\subsubsection}{\normalsize\itshape}{\thesubsubsection}{1em}{}
