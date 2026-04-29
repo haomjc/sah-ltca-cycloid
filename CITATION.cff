@@ -11,7 +11,7 @@ authors:
     email: haomjc@163.com
     corresponding: true
 license: MIT
-repository-code: "https://github.com/opencode-ai/sah-ltca-cycloid"
+repository-code: "https://github.com/haomjc/sah-ltca-cycloid"
 keywords:
   - cycloid reducer
   - loaded tooth contact analysis
@@ -19,3 +19,4 @@ keywords:
   - formal verification
   - pin-hole contact
   - Hertz theory
+abstract: "MATLTCA solver, formal verification artifacts, and LaTeX manuscript source for the Semantic Artifact Harness framework."
