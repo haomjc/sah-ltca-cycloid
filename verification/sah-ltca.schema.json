@@ -1,0 +1,248 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/opencode-ai/sah-ltca-cycloid/verification/sah-ltca.schema.json",
+  "title": "Semantic Artifact Harness (SAH) — LTCA Case Study",
+  "description": "Machine-verifiable schema for the Semantic Artifact Harness applied to Loaded Tooth Contact Analysis of cycloid-pin-housing reducers. Defines typed interfaces for research claims, evidence bindings, algorithm passports, and formula passports.",
+
+  "definitions": {
+    "ResearchCard": {
+      "type": "object",
+      "description": "Top-level identity and scope of the research artifact.",
+      "required": ["title", "hypothesis", "methodology", "expected_outcomes"],
+      "properties": {
+        "title": {
+          "type": "string",
+          "description": "Full title of the research artifact."
+        },
+        "hypothesis": {
+          "type": "string",
+          "description": "Testable hypothesis statement."
+        },
+        "methodology": {
+          "type": "string",
+          "description": "Summary of methodological approach."
+        },
+        "expected_outcomes": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "List of expected measurable outcomes."
+        },
+        "domain": {
+          "type": "string",
+          "enum": ["mechanical-engineering", "computational-physics", "other"],
+          "default": "mechanical-engineering"
+        }
+      }
+    },
+
+    "Claim": {
+      "type": "object",
+      "description": "A single verifiable claim with typed evidence binding.",
+      "required": ["id", "statement", "evidence_type", "evidence_ref"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^C[0-9]+$",
+          "description": "Unique claim identifier (e.g., C1, C2, ...)."
+        },
+        "statement": {
+          "type": "string",
+          "description": "Natural language claim statement."
+        },
+        "evidence_type": {
+          "type": "string",
+          "enum": ["code", "formula", "table", "figure", "simulation"],
+          "description": "Type of evidence supporting this claim."
+        },
+        "evidence_ref": {
+          "type": "object",
+          "description": "Pointer to the evidence artifact.",
+          "properties": {
+            "file": { "type": "string", "description": "Source file path (for code evidence)." },
+            "line_start": { "type": "integer", "minimum": 1 },
+            "line_end": { "type": "integer", "minimum": 1 },
+            "formula_id": { "type": "string", "description": "Formula identifier (for formula evidence)." },
+            "table_id": { "type": "string", "description": "Table identifier (for table evidence)." },
+            "figure_id": { "type": "string", "description": "Figure identifier (for figure evidence)." }
+          }
+        },
+        "preconditions": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Conditions that must hold before the evidence can be evaluated."
+        },
+        "postconditions": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Conditions that must hold after the algorithm executes."
+        },
+        "confidence": {
+          "type": "string",
+          "enum": ["verified", "partial", "unverified"],
+          "default": "unverified",
+          "description": "Verification status of this claim."
+        }
+      }
+    },
+
+    "ClaimEvidenceMap": {
+      "type": "object",
+      "description": "Maps all research claims to their evidence bindings.",
+      "required": ["claims"],
+      "properties": {
+        "version": { "type": "string", "default": "1.0" },
+        "claims": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/Claim" },
+          "minItems": 1
+        }
+      }
+    },
+
+    "ParameterSpec": {
+      "type": "object",
+      "description": "Typed parameter specification for an algorithm.",
+      "required": ["name", "type", "unit"],
+      "properties": {
+        "name": { "type": "string" },
+        "type": { "type": "string", "enum": ["scalar", "vector", "matrix", "struct"] },
+        "unit": { "type": "string", "description": "Physical unit (e.g., mm, N, N/mm, rad)." },
+        "bounds": {
+          "type": "object",
+          "properties": {
+            "min": {},
+            "max": {},
+            "exclusive_min": { "type": "boolean", "default": false },
+            "exclusive_max": { "type": "boolean", "default": false }
+          }
+        },
+        "description": { "type": "string" }
+      }
+    },
+
+    "AlgorithmPassport": {
+      "type": "object",
+      "description": "Formal interface specification for a MATLAB function.",
+      "required": ["function_name", "parameters", "return_type", "invariants"],
+      "properties": {
+        "function_name": { "type": "string", "description": "MATLAB function name (without .m)." },
+        "source_file": { "type": "string", "description": "Path to source file in repository." },
+        "parameters": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/ParameterSpec" }
+        },
+        "return_type": { "$ref": "#/definitions/ParameterSpec" },
+        "invariants": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Formal invariants that must hold on output (e.g., 'fp >= 0', 'fp(~work_mask) == 0')."
+        },
+        "convergence_criteria": {
+          "type": "object",
+          "properties": {
+            "method": { "type": "string", "description": "Convergence method (e.g., 'fixed-point iteration', 'bisection')." },
+            "tolerance": { "type": "number", "description": "Convergence tolerance." },
+            "max_iterations": { "type": "integer", "description": "Maximum allowed iterations." },
+            "warning_on_failure": { "type": "boolean", "default": true }
+          }
+        },
+        "dependencies": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Required MATLAB toolboxes (e.g., 'Symbolic Math Toolbox')."
+        }
+      }
+    },
+
+    "FormulaPassport": {
+      "type": "object",
+      "description": "Machine-readable specification of a formula used in the research.",
+      "required": ["formula_id", "latex", "variables"],
+      "properties": {
+        "formula_id": { "type": "string", "pattern": "^F[0-9]+$" },
+        "latex": { "type": "string", "description": "LaTeX representation of the formula." },
+        "variables": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["symbol", "description", "unit"],
+            "properties": {
+              "symbol": { "type": "string" },
+              "description": { "type": "string" },
+              "unit": { "type": "string" },
+              "dimension": { "type": "string", "description": "Dimensional analysis (e.g., '[M][L][T^-2]')." }
+            }
+          }
+        },
+        "source_ref": {
+          "type": "object",
+          "properties": {
+            "section": { "type": "string" },
+            "equation_number": { "type": "integer" }
+          }
+        },
+        "code_binding": {
+          "type": "object",
+          "description": "Where this formula is implemented in code.",
+          "properties": {
+            "file": { "type": "string" },
+            "line_start": { "type": "integer" },
+            "line_end": { "type": "integer" },
+            "variable_map": {
+              "type": "object",
+              "additionalProperties": { "type": "string" },
+              "description": "Maps formula symbols to MATLAB variable names."
+            }
+          }
+        }
+      }
+    },
+
+    "VerificationReport": {
+      "type": "object",
+      "description": "Results of automated verification against the SAH schema.",
+      "required": ["timestamp", "claims_checked", "results"],
+      "properties": {
+        "timestamp": { "type": "string", "format": "date-time" },
+        "tool": { "type": "string", "description": "Verification tool used (e.g., 'matlab-assert', 'dafny')." },
+        "claims_checked": { "type": "integer" },
+        "claims_passed": { "type": "integer" },
+        "claims_failed": { "type": "integer" },
+        "results": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["claim_id", "status"],
+            "properties": {
+              "claim_id": { "type": "string" },
+              "status": { "type": "string", "enum": ["pass", "fail", "skip", "error"] },
+              "message": { "type": "string" },
+              "evidence_snapshot": { "type": "string", "description": "Hash or path to evidence at time of check." }
+            }
+          }
+        }
+      }
+    }
+  },
+
+  "type": "object",
+  "required": ["research_card", "claim_evidence_map", "algorithm_passports", "formula_passports"],
+  "properties": {
+    "$schema_version": { "type": "string", "const": "sah-1.0" },
+    "research_card": { "$ref": "#/definitions/ResearchCard" },
+    "claim_evidence_map": { "$ref": "#/definitions/ClaimEvidenceMap" },
+    "algorithm_passports": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/AlgorithmPassport" },
+      "minItems": 1
+    },
+    "formula_passports": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/FormulaPassport" }
+    },
+    "verification_reports": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/VerificationReport" }
+    }
+  }
+}

@@ -1,0 +1,21 @@
+cff-version: 1.2.0
+title: "SAH-LTCA-Cycloid: Loaded Tooth Contact Analysis with Semantic Artifact Harness"
+message: "If you use this software, please cite it using the metadata from this file."
+type: software
+authors:
+  - name: "OpenCode"
+    website: "https://github.com/opencode-ai/opencode"
+  - given-names: Jiacheng
+    family-names: Miao
+    affiliation: "School of Mechanical Engineering, Dalian Jiaotong University"
+    email: haomjc@163.com
+    corresponding: true
+license: MIT
+repository-code: "https://github.com/opencode-ai/sah-ltca-cycloid"
+keywords:
+  - cycloid reducer
+  - loaded tooth contact analysis
+  - semantic artifact harness
+  - formal verification
+  - pin-hole contact
+  - Hertz theory
